@@ -1,17 +1,45 @@
 import type { PageLoad } from './$types';
 
+interface IDataResp {
+  casa: {
+    compra: string;
+    venta: string;
+    agencia: string;
+    nombre: string;
+    variacion: string;
+    ventaCero: string;
+    decimales: string
+  }
+}
+
+interface IDateResp {
+  ultima: {
+    [key: string]: {
+      fecha: string;
+      nombre: string;
+      hora: string;
+    }
+  }
+}
+
+
 async function getDolarInfo() {
   try {
     const resp = await fetch("https://www.dolarsi.com/api/api.php?type=valoresprincipales")
     const lastUpdateResp = await fetch("https://www.dolarsi.com/api/api.php?type=ultima")
 
-    const parsedLastUpdatedResp = await lastUpdateResp.json()
-    const parsedResp = await resp.json() as {casa: {compra: string; venta: string; agencia: string; nombre: string; variacion: string; ventaCero: string; decimales: string}}[]
+    console.log(resp)
 
 
-    const lastUpdate = parsedLastUpdatedResp[0].ultima.zona12
+    const parsedLastUpdatedResp = await lastUpdateResp.json() as IDateResp[]
 
-    const formattedArray = parsedResp.map(({casa}) => ({...casa, actualizacion: lastUpdate.fecha}))
+    const parsedResp = await resp.json() as IDataResp[]
+
+    console.log(parsedLastUpdatedResp)
+
+    const lastUpdate: string = parsedLastUpdatedResp[0].ultima.zona12.fecha
+
+    const formattedArray = parsedResp.map(({casa}) => ({...casa, actualizacion: lastUpdate}))
 
     return formattedArray
 
@@ -19,6 +47,7 @@ async function getDolarInfo() {
     console.log(error)
   }
 }
+
 
 export const load = (async () => {
 
