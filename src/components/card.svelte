@@ -11,8 +11,6 @@
 	}
 	export let info: IInfo;
 
-	console.log(info);
-
 	const parseToCurrency = (value: string) => {
 		const parsedToNumberValue = Number(value.replace('.', '').replace(',', '.'));
 

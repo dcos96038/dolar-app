@@ -28,14 +28,9 @@ async function getDolarInfo() {
     const resp = await fetch("https://www.dolarsi.com/api/api.php?type=valoresprincipales")
     const lastUpdateResp = await fetch("https://www.dolarsi.com/api/api.php?type=ultima")
 
-    console.log(resp)
-
-
     const parsedLastUpdatedResp = await lastUpdateResp.json() as IDateResp[]
 
     const parsedResp = await resp.json() as IDataResp[]
-
-    console.log(parsedLastUpdatedResp)
 
     const lastUpdate: string = parsedLastUpdatedResp[0].ultima.zona12.fecha
 
